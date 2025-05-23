@@ -1,1 +1,1 @@
-A recreating of the classic minesweeper game!
+A recreation of the classic minesweeper game!
