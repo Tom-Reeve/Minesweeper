@@ -1,7 +1,7 @@
 #siteContainer {
     outline: 1px solid;
 
-    display: block;
+    display: flex;
     position: absolute;
     height: auto;
 
@@ -14,4 +14,27 @@
     margin-bottom: 10px;
     margin-left: 10px;
     margin-right: 10px;
+}
+.infoContainer {
+    outline: 1px solid;
+
+    width: 20%;
+    height: 100%;
+}
+.right {
+    margin-left: auto;
+}
+#boardWrapper {
+    width: 60%;
+    height: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#board {
+    outline: 1px solid;
+
+    width: 600px;
+    height: 600px;
 }
