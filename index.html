@@ -7,7 +7,40 @@
     <body>
         <div id="siteContainer">
             <div class="infoContainer">
-
+                <div class="infoWrapper">
+                    <button class="infoButton" id="newGameButton">New Game</button>
+                </div>
+                <div class="infoWrapper">
+                    <div class="infoText">Choose Difficulty:</div>
+                </div>
+                <div class="infoWrapper">
+                    <input type="radio" id="easyRadio" name="difficulty" value="easy">
+                    <label for="easyRadio">Easy</label><br>
+                </div>
+                <div class="infoWrapper">
+                    <input type="radio" id="intermediateRadio" name="difficulty" value="intermediate">
+                    <label for="intermediateRadio">Intermediate</label><br>
+                </div>
+                <div class="infoWrapper">
+                    <input type="radio" id="hardRadio" name="difficulty" value="hard">
+                    <label for="hardRadio">Hard</label><br>
+                </div>
+                <div class="infoWrapper">
+                    <input type="radio" id="customRadio" name="difficulty" value="custom">
+                    <label for="customRadio">Custom</label><br>
+                </div>
+                <div class="infoWrapper">
+                    <label for="customX">Board Width: </label>
+                    <input type="number" id="customX" class="custom" name="custom" value="8">
+                </div>
+                    <div class="infoWrapper">
+                    <label for="customX">Board Height: </label>
+                    <input type="number" id="customY" class="custom" name="custom" value="8">
+                </div>
+                    <div class="infoWrapper">
+                    <label for="customCount">Mine Count: </label>
+                    <input type="number" id="customCount" class="custom" name="custom" value="10">
+                </div>
             </div>
             <div id="boardWrapper">
                 <div id="board"></div>
