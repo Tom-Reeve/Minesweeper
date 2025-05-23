@@ -20,6 +20,8 @@
 
     width: 20%;
     height: 100%;
+
+    position: relative;
 }
 .right {
     margin-left: auto;
@@ -47,7 +49,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
+    
     white-space: pre;
 }
 .infoButton {
@@ -57,4 +59,11 @@
 .custom {
     width: 20%;
     text-align: center;
+}
+.hidden {
+    display: none;
+}
+.bottom {
+    position: absolute;
+    bottom: 0;
 }

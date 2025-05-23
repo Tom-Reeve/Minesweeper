@@ -8,38 +8,41 @@
         <div id="siteContainer">
             <div class="infoContainer">
                 <div class="infoWrapper">
-                    <button class="infoButton" id="newGameButton">New Game</button>
+                    <button class="infoButton" id="newGameButton" onclick="newGame()">New Game</button>
                 </div>
-                <div class="infoWrapper">
+                <div class="infoWrapper hidden hiddenL1">
                     <div class="infoText">Choose Difficulty:</div>
                 </div>
-                <div class="infoWrapper">
+                <div class="infoWrapper hidden hiddenL1">
                     <input type="radio" id="easyRadio" name="difficulty" value="easy">
-                    <label for="easyRadio">Easy</label><br>
+                    <label for="easyRadio">Easy</label>
                 </div>
-                <div class="infoWrapper">
+                <div class="infoWrapper hidden hiddenL1">
                     <input type="radio" id="intermediateRadio" name="difficulty" value="intermediate">
-                    <label for="intermediateRadio">Intermediate</label><br>
+                    <label for="intermediateRadio">Intermediate</label>
                 </div>
-                <div class="infoWrapper">
+                <div class="infoWrapper hidden hiddenL1">
                     <input type="radio" id="hardRadio" name="difficulty" value="hard">
-                    <label for="hardRadio">Hard</label><br>
+                    <label for="hardRadio">Hard</label>
                 </div>
-                <div class="infoWrapper">
+                <div class="infoWrapper hidden hiddenL1">
                     <input type="radio" id="customRadio" name="difficulty" value="custom">
-                    <label for="customRadio">Custom</label><br>
+                    <label for="customRadio">Custom</label>
                 </div>
-                <div class="infoWrapper">
+                <div class="infoWrapper hidden hiddenL2">
                     <label for="customX">Board Width: </label>
                     <input type="number" id="customX" class="custom" name="custom" value="8">
                 </div>
-                    <div class="infoWrapper">
+                    <div class="infoWrapper hidden hiddenL2">
                     <label for="customX">Board Height: </label>
                     <input type="number" id="customY" class="custom" name="custom" value="8">
                 </div>
-                    <div class="infoWrapper">
+                    <div class="infoWrapper hidden hiddenL2">
                     <label for="customCount">Mine Count: </label>
                     <input type="number" id="customCount" class="custom" name="custom" value="10">
+                </div>
+                <div class="infoWrapper hidden hiddenL1 bottom">
+                    <button class="infoButton" id="startGameButton">Start</button>
                 </div>
             </div>
             <div id="boardWrapper">
@@ -49,5 +52,6 @@
 
             </div>
         </div>
+        <script src="script.js"></script>
     </body>
 </HTML>
