@@ -1,0 +1,17 @@
+#siteContainer {
+    outline: 1px solid;
+
+    display: block;
+    position: absolute;
+    height: auto;
+
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
