@@ -1,7 +1,7 @@
 const difficultyRadios = document.querySelectorAll(".hiddenL1");
-const customDifficulty = document.getElementById("customRadio");
+const customRadio = document.getElementById("customRadio");
 
-const difficultyCustom = document.querySelectorAll(".hiddenL2");
+const customInput = document.querySelectorAll(".hiddenL2");
 
 function newGame() {
     for (let div of difficultyRadios) {
@@ -9,12 +9,12 @@ function newGame() {
     }
     difficultyRadios.forEach(radio => {
         radio.addEventListener("change", () => {
-            if (customDifficulty.checked) {
-                for (let div of difficultyCustom) {
+            if (customRadio.checked) {
+                for (let div of customInput) {
                     div.style.display = "flex";
                 }
             } else {
-                for (let div of difficultyCustom) {
+                for (let div of customInput) {
                     div.style.display = "none";
                 }
             }
