@@ -4,6 +4,8 @@ class Cell {
         this.y = y;
         this.size = size;
 
+        this.element;
+
         this.isMine = false;
         this.flagged = false;
         this.revealed = false;
@@ -18,5 +20,6 @@ class Cell {
         cell.style.height = this.size + "px";
 
         parent.appendChild(cell);
+        this.element = cell;
     }
 }

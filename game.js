@@ -4,7 +4,7 @@ class Game {
         this.cols = cols;
         this.mines = mines;
 
-        this.cellSize = 25;
+        this.cellSize = 20;
 
         this.flags = 0;
         this.board = this.createBoard();
@@ -25,12 +25,6 @@ class Game {
         return board;
     }
     displayBoard() {
-        const parent = this.boardParent;
-        while (parent.firstChild) {
-            parent.removeChild(parent.firstChild);
-        }
-
-
         let width = this.cellSize * this.rows;
         let height = this.cellSize * this.cols;
 
@@ -40,8 +34,14 @@ class Game {
         for (let i = 0 ; i < this.board.length ; i++) {
             let row = this.board[i];
             for (let j = 0 ; j < row.length ; j++) {
-                row[j].render(this.boardParent);
+                let cell = this.board[i][j];
+                
+                cell.render(this.boardParent);
+                cell.element.onclick = (event) => this.checkCell(cell);
             }
         }
+    }
+    checkCell(cell) {
+        alert(cell.isMine);
     }
 }
