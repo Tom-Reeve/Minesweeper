@@ -5,6 +5,7 @@ class Cell {
         this.size = size;
 
         this.element;
+        this.isCurrentCell = false;
 
         this.isMine = false;
         this.flagged = false;
