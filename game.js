@@ -17,10 +17,10 @@ class Game {
     createBoard() {
         let board = [];
         this.boardElement;
-        for (let row = 0 ; row < this.rows ; row++) {
+        for (let col = 0 ; col < this.cols ; col++) {
             let currentRow = [];
-            for (let col = 0 ; col < this.cols ; col++) {
-                let cell = new Cell(col, row, this.cellSize);
+            for (let row = 0 ; row < this.rows ; row++) {
+                let cell = new Cell(row, col, this.cellSize);
                 currentRow.push(cell);
             }
             board.push(currentRow);
@@ -101,10 +101,10 @@ class Game {
     placeMines() {
         let placedMines = 0;
         while (placedMines < this.mines) {
-            let randomRow = Math.floor(Math.random() * this.rows);
-            let randomCol = Math.floor(Math.random() * this.cols);
+            let randomX = Math.floor(Math.random() * this.cols);
+            let randomY = Math.floor(Math.random() * this.rows);
 
-            let chosenCell = this.board[randomRow][randomCol];
+            let chosenCell = this.board[randomX][randomY];
 
             if (!chosenCell.isCurrentCell && !chosenCell.isMine) {
                 chosenCell.isMine = true;
@@ -114,7 +114,7 @@ class Game {
         this.updateCellNeighbours();
     }
     updateCellNeighbours() {
-        let offsetCell;
+        /*let offsetCell;
         let mineCount = 0;
 
         for (let col = 0 ; col < this.cols ; col++) {
@@ -147,7 +147,9 @@ class Game {
                 cell.isCurrentCell = false;
                 mineCount = 0;
             }
-        }
+        }*/
+
+        
     }
     activateFloodfill(firstCell) {
         for (let i = -1 ; i <= 1 ; i++) {
