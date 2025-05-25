@@ -1,3 +1,14 @@
+const cellColours = {
+    1: "blue",
+    2: "green",
+    3: "red",
+    4: "pink",
+    5: "orange",
+    6: "yellow",
+    7: "brown",
+    8: "black",
+}
+
 class Cell {
     constructor(x, y, size) {
         this.x = x;
@@ -28,9 +39,14 @@ class Cell {
             this.element.classList.remove("class", "flagged");
             this.element.classList.add("class", "clicked");
             this.element.style.backgroundColor = "lightgrey";
-            this.element.innerHTML = this.neighbourMineCount;
+
+            this.element.style.color = cellColours[this.neighbourMineCount];
+            this.element.innerHTML = this.neighbourMineCount > 0 ? this.neighbourMineCount : "";
         } else {
             this.element.classList.add("class", "exploded");
+            if (!this.flagged && !this.isMine) {
+                this.element.style.backgroundColor = "red";
+            }
         }
         this.revealed = true;
     }

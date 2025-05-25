@@ -65,7 +65,7 @@
     bottom: 0;
 }
 .cell {
-    outline: 1px solid;
+    outline: 1px solid black;
     float: left;
 
     display: flex;

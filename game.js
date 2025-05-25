@@ -81,6 +81,7 @@ class Game {
             if (cell.neighbourMineCount === 0) {
                 this.activateFloodfill(cell);
             }
+            this.checkWin();
         }
     }
     flagCell(cell) {
@@ -89,7 +90,6 @@ class Game {
         }
         cell.flag();
         this.flags++;
-        this.checkWin();
     }
     unflagCell(cell) {
         if (this.gameOver) {
@@ -149,19 +149,6 @@ class Game {
             }
         }
     }
-    showMines() {
-        for (let i = 0 ; i < this.board.length ; i++) {
-            let row = this.board[i];
-            for (let j = 0 ; j < row.length ; j++) {
-                let cell = this.board[i][j];
-                if (cell.isMine) {
-                    cell.element.style.backgroundColor = "red";
-                } else {
-                    cell.element.innerHTML = cell.neighbourMineCount;
-                }
-            }
-        }
-    }
     activateFloodfill(firstCell) {
         for (let i = -1 ; i <= 1 ; i++) {
             for (let j = -1 ; j <= 1 ; j++) {
@@ -195,18 +182,19 @@ class Game {
         }
     }
     checkWin() {
-        let correctlyFlagged = 0;
+        let revealedCells = 0;
+
         for (let i = 0 ; i < this.board.length ; i++) {
             for (let j = 0 ; j < this.board[0].length ; j++) {
                 let cell = this.board[i][j];
 
-                if (cell.isMine && cell.flagged) {
-                    correctlyFlagged++;
+                if (cell.revealed) {
+                    revealedCells++;
                 }
             }
         }
-        if (correctlyFlagged === parseInt(this.mines)) {
-            game.gameOver = true;
+        let cellsToReveal = (this.rows * this.cols) - this.mines;
+        if (cellsToReveal === revealedCells) {
             alert("YOU WIN");
         }
     }
