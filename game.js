@@ -149,10 +149,43 @@ class Game {
             }
         }*/
 
-        
+        let offsetCell;
+        let mineCount = 0;
+
+        for (let col = 0 ; col < this.cols ; col++) {
+            for (let row = 0 ; row < this.rows ; row++) {
+                let cell = this.board[col][row];
+                cell.isCurrentCell = true;
+
+                for (let i = -1 ; i <= 1; i++) {
+                    for (let j = -1 ; j <= 1 ; j++) {
+                        let colOffset = cell.x + i;
+                        let rowOffset = cell.y + j;
+
+                        if (colOffset >= 0 && colOffset <= this.rows - 1) {
+                            if (rowOffset >= 0 && rowOffset <= this.cols - 1) {
+                                offsetCell = this.board[rowOffset][colOffset];
+                                if (!offsetCell.isCurrentCell) {
+                                    if (offsetCell.isMine) {
+                                        mineCount++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                cell.neighbourMineCount = mineCount;
+                if (cell.isMine) {
+                    cell.neighbourMineCount = -1;
+                }
+
+                cell.isCurrentCell = false;
+                mineCount = 0;
+            }
+        }
     }
     activateFloodfill(firstCell) {
-        for (let i = -1 ; i <= 1 ; i++) {
+        /*for (let i = -1 ; i <= 1 ; i++) {
             for (let j = -1 ; j <= 1 ; j++) {
                 let yOffset = firstCell.y + i;
                 let xOffset = firstCell.x + j;
@@ -169,6 +202,29 @@ class Game {
                                     }
                                 }
                             }  
+                        }
+                    }
+                }
+            }
+        }*/
+
+        for (let i = -1 ; i <= 1; i++) {
+            for (let j = -1 ; j <= 1 ; j++) {
+                let colOffset = firstCell.x + i;
+                let rowOffset = firstCell.y + j;
+
+                if (colOffset >= 0 && colOffset <= this.rows - 1) {
+                    if (rowOffset >= 0 && rowOffset <= this.cols - 1) {
+                        let offsetCell = this.board[rowOffset][colOffset];
+                        if (!offsetCell.isCurrentCell) {
+                            if (!offsetCell.revealed) {
+                                if (!offsetCell.flagged) {
+                                    offsetCell.reveal();
+                                    if (offsetCell.neighbourMineCount === 0) {
+                                        this.activateFloodfill(offsetCell);
+                                    }
+                                }
+                            }
                         }
                     }
                 }
