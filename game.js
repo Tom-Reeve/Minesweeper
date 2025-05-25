@@ -46,18 +46,57 @@ class Game {
                 let cell = this.board[i][j];
                 
                 cell.render(this.boardParent);
-                cell.element.onclick = (event) => this.checkCell(cell);
+
+                window.addEventListener("contextmenu", (e) => {
+                    e.preventDefault();
+                });
+                cell.element.onmousedown = (event) => {
+                if (event.button === 0) {
+                    this.checkCell(cell);
+                } else if (event.button === 2) {
+                    if (!cell.flagged) {
+                        this.flagCell(cell);
+                    } else {
+                        this.unflagCell(cell);
+                    }
+                }
+  };
             }
         }
     }
     checkCell(cell) {
+        if (this.gameOver) {
+            return;
+        }
         cell.isCurrentCell = true;
         if (this.firstCell) {
             this.firstCell = false;
             this.placeMines();
-        } else if (cell.isMine) {
-            game.gameOver = true;
         }
+        if (cell.isMine) {
+            game.gameOver = true;
+            this.revealAll();
+        } else {
+            cell.reveal();
+            if (cell.neighbourMineCount === 0) {
+                this.activateFloodfill(cell);
+            }
+        }
+    }
+    flagCell(cell) {
+        if (game.gameOver) {
+            return;
+        }
+        cell.flag();
+        this.flags++;
+        this.checkWin();
+    }
+    unflagCell(cell) {
+        if (this.gameOver) {
+            return;
+        }
+        cell.unflag();
+        this.flags--;
     }
     placeMines() {
         let placedMines = 0;
@@ -101,6 +140,9 @@ class Game {
                     }
                 }
                 cell.neighbourMineCount = mineCount;
+                if (cell.isMine) {
+                    cell.neighbourMineCount = -1;
+                }
 
                 cell.isCurrentCell = false;
                 mineCount = 0;
@@ -115,9 +157,57 @@ class Game {
                 if (cell.isMine) {
                     cell.element.style.backgroundColor = "red";
                 } else {
-                    cell.innerHTMl = cell.neighbourMineCount;
+                    cell.element.innerHTML = cell.neighbourMineCount;
                 }
             }
+        }
+    }
+    activateFloodfill(firstCell) {
+        for (let i = -1 ; i <= 1 ; i++) {
+            for (let j = -1 ; j <= 1 ; j++) {
+                let yOffset = firstCell.y + i;
+                let xOffset = firstCell.x + j;
+
+                if (yOffset >= 0 && yOffset <= this.rows - 1) {
+                    if (xOffset >= 0 && xOffset <= this.cols - 1) {
+                        let offsetCell = this.board[yOffset][xOffset];
+                        if (!offsetCell.isCurrentCell) {
+                            if (!offsetCell.revealed) {
+                                if (!offsetCell.flagged) {
+                                    offsetCell.reveal();
+                                    if (offsetCell.neighbourMineCount === 0) {
+                                        this.activateFloodfill(offsetCell);
+                                    }
+                                }
+                            }  
+                        }
+                    }
+                }
+            }
+        }
+    }
+    revealAll() {
+        for (let i = 0 ; i < this.board.length ; i++) {
+            for (let j = 0 ; j < this.board[0].length ; j++) {
+                let cell = this.board[i][j];
+                cell.reveal();
+            }
+        }
+    }
+    checkWin() {
+        let correctlyFlagged = 0;
+        for (let i = 0 ; i < this.board.length ; i++) {
+            for (let j = 0 ; j < this.board[0].length ; j++) {
+                let cell = this.board[i][j];
+
+                if (cell.isMine && cell.flagged) {
+                    correctlyFlagged++;
+                }
+            }
+        }
+        if (correctlyFlagged === parseInt(this.mines)) {
+            game.gameOver = true;
+            alert("YOU WIN");
         }
     }
 }

@@ -23,4 +23,31 @@ class Cell {
         parent.appendChild(cell);
         this.element = cell;
     }
+    reveal() {
+        if (!this.isMine) {
+            this.element.classList.remove("class", "flagged");
+            this.element.classList.add("class", "clicked");
+            this.element.style.backgroundColor = "lightgrey";
+            this.element.innerHTML = this.neighbourMineCount;
+        } else {
+            this.element.classList.add("class", "exploded");
+        }
+        this.revealed = true;
+    }
+    flag() {
+        if (this.revealed) {
+            return;
+        }
+        this.flagged = true;
+        this.element.classList.add("class", "flagged");
+        this.element.style.backgroundColor = "green";
+    }
+    unflag() {
+        if (this.revealed) {
+            return;
+        }
+        this.flagged = false;
+        this.element.classList.remove("class", "flagged");
+        this.element.style.backgroundColor = "grey";
+    }
 }

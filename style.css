@@ -67,4 +67,21 @@
 .cell {
     outline: 1px solid;
     float: left;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    user-select: none;
+
+    background-color: grey;
+}
+.clicked {
+    background-color: lightgrey;
+}
+.flagged {
+    background-color: green;
+}
+.exploded {
+    background-color: red;
 }
