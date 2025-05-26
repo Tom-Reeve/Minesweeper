@@ -9,6 +9,10 @@ let allInputs = document.querySelectorAll("input[type='number']");
 
 const customInput = document.querySelectorAll(".hiddenL2");
 
+let widthInput = document.getElementById("customX");
+let heightInput = document.getElementById("customY");
+let minesInput = document.getElementById("customCount");
+
 let game;
 
 function newGame() {
@@ -74,12 +78,20 @@ function startGame() {
         let presets = difficulty[selected];
         game = new Game(presets.width, presets.height, presets.mines);
      } else {
-        let width = document.getElementById("customX").value;
+        let width = widthInput.value;
         width = width <= 30 ? width : 30;
-        let height = document.getElementById("customY").value;
+        width = width < 5 ? 5 : width;
+        widthInput.value = width;
+
+        let height = heightInput.value;
         height = height <= 30 ? height : 30;
-        let mines = document.getElementById("customCount").value;
-        mines <= (width * height) - 1 ? mines : (width * height) - 1;
+        height = height < 5 ? 5 : height;
+        heightInput.value = height;
+
+        let mines = minesInput.value;
+        mines = mines > (width * height) - 1 ? Math.floor((width * height) / 4) : mines;
+        mines = mines < 1 ? 1 : mines;
+        minesInput.value = mines;
 
         game = new Game(width, height, mines);
      }
