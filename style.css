@@ -46,8 +46,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    
-    white-space: pre;
 }
 .infoButton {
     width: 100%;
@@ -59,6 +57,9 @@
 }
 .hidden {
     display: none;
+}
+.hiddenL2 {
+    white-space: pre;
 }
 .bottom {
     position: absolute;
@@ -84,4 +85,7 @@
 }
 .exploded {
     background-color: red;
+}
+.infoText {
+    text-align: center;
 }

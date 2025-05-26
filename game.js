@@ -1,3 +1,8 @@
+const runTimer = document.getElementById("runTimer");
+const flagsLeft = document.getElementById("flagsLeft");
+const runClicks = document.getElementById("clicks");
+const revealedFlagged = document.getElementById("revealedFlagged");
+
 class Game {
     constructor(rows, cols, mines) {
         this.rows = rows;
@@ -11,6 +16,8 @@ class Game {
         this.board = this.createBoard();
         this.boardParent = document.getElementById("board");
         this.startTime = null;
+        this.timer;
+        this.clicks = 0;
 
         this.gameOver = false;
     }
@@ -50,19 +57,25 @@ class Game {
                 window.addEventListener("contextmenu", (e) => {
                     e.preventDefault();
                 });
+
                 cell.element.onmousedown = (event) => {
-                if (event.button === 0) {
-                    this.checkCell(cell);
-                } else if (event.button === 2) {
-                    if (!cell.flagged) {
-                        this.flagCell(cell);
-                    } else {
-                        this.unflagCell(cell);
+                    if (event.button === 0) {
+                        this.checkCell(cell);
+                    } else if (event.button === 2) {
+                        if (!cell.flagged) {
+                            this.flagCell(cell);
+                        } else {
+                            this.unflagCell(cell);
+                        }
+                    }
+                    if (!this.gameOver) {
+                        this.clicks++;
+                        runClicks.innerHTML = this.clicks;
                     }
                 }
-  };
             }
         }
+        flagsLeft.innerHTML = this.mines;
     }
     checkCell(cell) {
         if (this.gameOver) {
@@ -71,25 +84,58 @@ class Game {
         cell.isCurrentCell = true;
         if (this.firstCell) {
             this.firstCell = false;
+            this.startTime = Date.now();
             this.placeMines();
+            this.startTimer();
+            this.percentRevealed();
         }
         if (cell.isMine) {
             game.gameOver = true;
             this.revealAll();
+            clearInterval(this.timer);
         } else {
             cell.reveal();
             if (cell.neighbourMineCount === 0) {
                 this.activateFloodfill(cell);
             }
+            this.percentRevealed();
             this.checkWin();
         }
     }
+    percentRevealed() {
+        let revealedOrFlagged = 0;
+        for (let col = 0 ; col < this.cols ; col++) {
+            for (let row = 0 ; row < this.rows ; row++) {
+                let cell = this.board[col][row];
+                if (cell.revealed || cell.flagged) {
+                    revealedOrFlagged++;
+                }
+            }
+        }
+        let totalCells = this.rows * this.cols;
+        let percent = ((revealedOrFlagged / totalCells) * 100).toFixed(2);
+
+        revealedFlagged.innerHTML = percent;
+    }
+    startTimer() {
+        if (this.timer) {
+            clearInterval(this.timer);
+        }
+        this.timer = setInterval(() => {
+            const elapsed = (Date.now() - this.startTime) / 1000;
+            if (!this.gameOver) {
+                runTimer.innerHTML = Math.floor(elapsed);
+            }
+        }, 100);
+    }
     flagCell(cell) {
-        if (game.gameOver) {
+        if (this.gameOver) {
             return;
         }
         cell.flag();
         this.flags++;
+        flagsLeft.innerHTML = this.mines - this.flags;
+        this.percentRevealed();
     }
     unflagCell(cell) {
         if (this.gameOver) {
@@ -97,6 +143,7 @@ class Game {
         }
         cell.unflag();
         this.flags--;
+        flagsLeft.innerHTML = this.mines - this.flags;
     }
     placeMines() {
         let placedMines = 0;
@@ -230,6 +277,7 @@ class Game {
                 }
             }
         }
+        this.percentRevealed();
     }
     revealAll() {
         for (let i = 0 ; i < this.board.length ; i++) {
@@ -253,6 +301,8 @@ class Game {
         }
         let cellsToReveal = (this.rows * this.cols) - this.mines;
         if (cellsToReveal === revealedCells) {
+            this.gameOver = true;
+            clearInterval(this.timer);
             alert("YOU WIN");
         }
     }

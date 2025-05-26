@@ -12,6 +12,9 @@ const customInput = document.querySelectorAll(".hiddenL2");
 let game;
 
 function newGame() {
+    if (game) {
+        game.gameOver = true;
+    }
     newGameButton.disabled = true;
     startButton.disabled = false;
     for (let div of difficultyRadios) {
