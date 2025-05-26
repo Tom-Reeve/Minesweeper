@@ -46,7 +46,9 @@ class Cell {
         this.element = cell;
     }
     reveal() {
-        if (!this.isMine) {
+        if (!this.isMine && this.flagged){
+            this.element.innerHTML = "&#10060;";
+        } else if (!this.isMine) {
             this.element.classList.add("class", "clicked");
             this.element.style.backgroundColor = "lightgrey";
             this.element.innerHTML = "";
@@ -54,8 +56,9 @@ class Cell {
             this.element.style.color = cellColours[this.neighbourMineCount];
             this.element.innerHTML = this.neighbourMineCount > 0 ? this.neighbourMineCount : "";
             this.flagged = false;
-        } else if (this.isMine && !this.flagged){
+        } else if (this.isMine && !this.flagged) {
             this.element.innerHTML = "&#x1F4A3;";
+
         }
         this.revealed = true;
     }
