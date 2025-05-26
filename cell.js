@@ -1,4 +1,4 @@
-const cellColours = {
+/*const cellColours = {
     1: "blue",
     2: "green",
     3: "red",
@@ -7,7 +7,18 @@ const cellColours = {
     6: "yellow",
     7: "brown",
     8: "black",
-}
+}*/
+
+const cellColours = {
+    1: "#0000CC", // Deep Blue (classic look)
+    2: "#2E8B57", // Sea Green
+    3: "#B22222", // Firebrick
+    4: "#C71585", // Medium Violet Red
+    5: "#FF8C00", // Dark Orange
+    6: "#DAA520", // Goldenrod
+    7: "#8B4513", // Saddle Brown
+    8: "#696969", // Dim Gray
+};
 
 class Cell {
     constructor(x, y, size) {
