@@ -1,7 +1,10 @@
 const runTimer = document.getElementById("runTimer");
 const flagsLeft = document.getElementById("flagsLeft");
 const runClicks = document.getElementById("clicks");
-const revealedFlagged = document.getElementById("revealedFlagged");
+const revealed = document.getElementById("revealed");
+
+const result = document.getElementById("wonLost");
+const resultWrapper = document.querySelector(".result");
 
 class Game {
     constructor(rows, cols, mines) {
@@ -61,6 +64,8 @@ class Game {
                 cell.element.onmousedown = (event) => {
                     if (event.button === 0) {
                         this.checkCell(cell);
+                    } else if (event.button === 1) {
+                        this.activateChording(cell);
                     } else if (event.button === 2) {
                         if (!cell.flagged) {
                             this.flagCell(cell);
@@ -88,11 +93,17 @@ class Game {
             this.placeMines();
             this.startTimer();
             this.percentRevealed();
+
+            resultWrapper.style.backgroundColor = "white";
+            result.innerHTML = " - ";
         }
         if (cell.isMine) {
             game.gameOver = true;
             this.revealAll();
             clearInterval(this.timer);
+
+            result.innerHTML = "LOST";
+            resultWrapper.style.backgroundColor = "red";
         } else {
             cell.reveal();
             if (cell.neighbourMineCount === 0) {
@@ -103,19 +114,19 @@ class Game {
         }
     }
     percentRevealed() {
-        let revealedOrFlagged = 0;
+        let revealedCount = 0;
         for (let col = 0 ; col < this.cols ; col++) {
             for (let row = 0 ; row < this.rows ; row++) {
                 let cell = this.board[col][row];
-                if (cell.revealed || cell.flagged) {
-                    revealedOrFlagged++;
+                if (cell.revealed) {
+                    revealedCount++;
                 }
             }
         }
-        let totalCells = this.rows * this.cols;
-        let percent = ((revealedOrFlagged / totalCells) * 100).toFixed(2);
+        let totalCells = (this.rows * this.cols) - this.mines;
+        let percent = ((revealedCount / totalCells) * 100).toFixed(2);
 
-        revealedFlagged.innerHTML = percent;
+        revealed.innerHTML = percent;
     }
     startTimer() {
         if (this.timer) {
@@ -129,13 +140,12 @@ class Game {
         }, 100);
     }
     flagCell(cell) {
-        if (this.gameOver) {
+        if (this.gameOver || cell.revealed) {
             return;
         }
         cell.flag();
         this.flags++;
         flagsLeft.innerHTML = this.mines - this.flags;
-        this.percentRevealed();
     }
     unflagCell(cell) {
         if (this.gameOver) {
@@ -287,6 +297,36 @@ class Game {
             }
         }
     }
+    activateChording(cell) {
+        if (this.gameOver) {
+            return;
+        }
+        let flagCount = 0;
+        let neigbourCells = [];
+        for (let i = -1 ; i <= 1; i++) {
+            for (let j = -1 ; j <= 1 ; j++) {
+                let colOffset = cell.x + i;
+                let rowOffset = cell.y + j;
+
+                if (colOffset >= 0 && colOffset <= this.rows - 1) {
+                    if (rowOffset >= 0 && rowOffset <= this.cols - 1) {
+                        let offsetCell = this.board[rowOffset][colOffset];
+                        if (offsetCell.flagged) {
+                            flagCount++;
+                        }
+                        neigbourCells.push(offsetCell);
+                    }
+                }
+            }
+        }
+        if (flagCount === cell.neighbourMineCount) {
+            for (let cell of neigbourCells) {
+                if (!cell.flagged && !cell.revealed) {
+                    this.checkCell(cell);
+                }
+            }
+        }
+    }
     checkWin() {
         let revealedCells = 0;
 
@@ -302,8 +342,11 @@ class Game {
         let cellsToReveal = (this.rows * this.cols) - this.mines;
         if (cellsToReveal === revealedCells) {
             this.gameOver = true;
+            this.revealAll();
             clearInterval(this.timer);
-            alert("YOU WIN");
+
+            result.innerHTML = "WON";
+            resultWrapper.style.backgroundColor = "green";
         }
     }
 }

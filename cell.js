@@ -36,17 +36,15 @@ class Cell {
     }
     reveal() {
         if (!this.isMine) {
-            this.element.classList.remove("class", "flagged");
             this.element.classList.add("class", "clicked");
             this.element.style.backgroundColor = "lightgrey";
+            this.element.innerHTML = "";
 
             this.element.style.color = cellColours[this.neighbourMineCount];
             this.element.innerHTML = this.neighbourMineCount > 0 ? this.neighbourMineCount : "";
-        } else {
-            this.element.classList.add("class", "exploded");
-            if (!this.flagged && !this.isMine) {
-                this.element.style.backgroundColor = "red";
-            }
+            this.flagged = false;
+        } else if (this.isMine && !this.flagged){
+            this.element.innerHTML = "&#x1F4A3;";
         }
         this.revealed = true;
     }
@@ -55,15 +53,13 @@ class Cell {
             return;
         }
         this.flagged = true;
-        this.element.classList.add("class", "flagged");
-        this.element.style.backgroundColor = "green";
+        this.element.innerHTML = "&#x1F6A9;";
     }
     unflag() {
         if (this.revealed) {
             return;
         }
         this.flagged = false;
-        this.element.classList.remove("class", "flagged");
-        this.element.style.backgroundColor = "grey";
+        this.element.innerHTML = "";
     }
 }

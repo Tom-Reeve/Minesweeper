@@ -34,9 +34,6 @@
     justify-content: center;
     align-items: center;
 }
-#board {
-    outline: 1px solid;
-}
 .infoWrapper {
     outline: 1px solid;
 
@@ -66,7 +63,6 @@
     bottom: 0;
 }
 .cell {
-    outline: 1px solid black;
     float: left;
 
     display: flex;
@@ -76,15 +72,21 @@
     user-select: none;
 
     background-color: grey;
+
+    background-color: #c0c0c0; /* light gray, like Minesweeper */
+    border-top: 2px solid white;
+    border-left: 2px solid white;
+    border-bottom: 2px solid #808080;
+    border-right: 2px solid #808080;
+    box-sizing: border-box;
 }
 .clicked {
     background-color: lightgrey;
-}
-.flagged {
-    background-color: green;
-}
-.exploded {
-    background-color: red;
+
+    border-top: 1px solid #808080;
+    border-left: 1px solid #808080;
+    border-bottom: 1px solid white;
+    border-right: 1px solid white;
 }
 .infoText {
     text-align: center;
