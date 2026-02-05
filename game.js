@@ -7,6 +7,8 @@ const result = document.getElementById("wonLost");
 const resultWrapper = document.querySelector(".result");
 
 class Game {
+    static contextMenuBound = false;
+
     constructor(rows, cols, mines) {
         this.rows = rows;
         this.cols = cols;
@@ -27,10 +29,10 @@ class Game {
     createBoard() {
         let board = [];
         this.boardElement;
-        for (let col = 0 ; col < this.cols ; col++) {
+        for (let row = 0 ; row < this.rows ; row++) {
             let currentRow = [];
-            for (let row = 0 ; row < this.rows ; row++) {
-                let cell = new Cell(row, col, this.cellSize);
+            for (let col = 0 ; col < this.cols ; col++) {
+                let cell = new Cell(col, row, this.cellSize);
                 currentRow.push(cell);
             }
             board.push(currentRow);
@@ -44,8 +46,15 @@ class Game {
         }
 
 
-        let width = this.cellSize * this.rows;
-        let height = this.cellSize * this.cols;
+        if (!Game.contextMenuBound) {
+            window.addEventListener("contextmenu", (e) => {
+                e.preventDefault();
+            });
+            Game.contextMenuBound = true;
+        }
+
+        let width = this.cellSize * this.cols;
+        let height = this.cellSize * this.rows;
 
         this.boardParent.style.width = width + "px";
         this.boardParent.style.height = height + "px";
@@ -56,10 +65,6 @@ class Game {
                 let cell = this.board[i][j];
                 
                 cell.render(this.boardParent);
-
-                window.addEventListener("contextmenu", (e) => {
-                    e.preventDefault();
-                });
 
                 cell.element.onmousedown = (event) => {
                     if (event.button === 0) {
@@ -98,7 +103,7 @@ class Game {
             result.innerHTML = " - ";
         }
         if (cell.isMine) {
-            game.gameOver = true;
+            this.gameOver = true;
             this.revealAll();
             clearInterval(this.timer);
 
@@ -115,9 +120,9 @@ class Game {
     }
     percentRevealed() {
         let revealedCount = 0;
-        for (let col = 0 ; col < this.cols ; col++) {
-            for (let row = 0 ; row < this.rows ; row++) {
-                let cell = this.board[col][row];
+        for (let row = 0 ; row < this.rows ; row++) {
+            for (let col = 0 ; col < this.cols ; col++) {
+                let cell = this.board[row][col];
                 if (cell.revealed) {
                     revealedCount++;
                 }
@@ -158,10 +163,10 @@ class Game {
     placeMines() {
         let placedMines = 0;
         while (placedMines < this.mines) {
-            let randomX = Math.floor(Math.random() * this.cols);
-            let randomY = Math.floor(Math.random() * this.rows);
+            let randomCol = Math.floor(Math.random() * this.cols);
+            let randomRow = Math.floor(Math.random() * this.rows);
 
-            let chosenCell = this.board[randomX][randomY];
+            let chosenCell = this.board[randomRow][randomCol];
 
             if (!chosenCell.isCurrentCell && !chosenCell.isMine) {
                 chosenCell.isMine = true;
@@ -209,18 +214,18 @@ class Game {
         let offsetCell;
         let mineCount = 0;
 
-        for (let col = 0 ; col < this.cols ; col++) {
-            for (let row = 0 ; row < this.rows ; row++) {
-                let cell = this.board[col][row];
+        for (let row = 0 ; row < this.rows ; row++) {
+            for (let col = 0 ; col < this.cols ; col++) {
+                let cell = this.board[row][col];
                 cell.isCurrentCell = true;
 
                 for (let i = -1 ; i <= 1; i++) {
                     for (let j = -1 ; j <= 1 ; j++) {
-                        let colOffset = cell.x + i;
-                        let rowOffset = cell.y + j;
+                        let colOffset = cell.x + j;
+                        let rowOffset = cell.y + i;
 
-                        if (colOffset >= 0 && colOffset <= this.rows - 1) {
-                            if (rowOffset >= 0 && rowOffset <= this.cols - 1) {
+                        if (colOffset >= 0 && colOffset <= this.cols - 1) {
+                            if (rowOffset >= 0 && rowOffset <= this.rows - 1) {
                                 offsetCell = this.board[rowOffset][colOffset];
                                 if (!offsetCell.isCurrentCell) {
                                     if (offsetCell.isMine) {
@@ -267,11 +272,11 @@ class Game {
 
         for (let i = -1 ; i <= 1; i++) {
             for (let j = -1 ; j <= 1 ; j++) {
-                let colOffset = firstCell.x + i;
-                let rowOffset = firstCell.y + j;
+                let colOffset = firstCell.x + j;
+                let rowOffset = firstCell.y + i;
 
-                if (colOffset >= 0 && colOffset <= this.rows - 1) {
-                    if (rowOffset >= 0 && rowOffset <= this.cols - 1) {
+                if (colOffset >= 0 && colOffset <= this.cols - 1) {
+                    if (rowOffset >= 0 && rowOffset <= this.rows - 1) {
                         let offsetCell = this.board[rowOffset][colOffset];
                         if (!offsetCell.isCurrentCell) {
                             if (!offsetCell.revealed) {
@@ -305,11 +310,11 @@ class Game {
         let neigbourCells = [];
         for (let i = -1 ; i <= 1; i++) {
             for (let j = -1 ; j <= 1 ; j++) {
-                let colOffset = cell.x + i;
-                let rowOffset = cell.y + j;
+                let colOffset = cell.x + j;
+                let rowOffset = cell.y + i;
 
-                if (colOffset >= 0 && colOffset <= this.rows - 1) {
-                    if (rowOffset >= 0 && rowOffset <= this.cols - 1) {
+                if (colOffset >= 0 && colOffset <= this.cols - 1) {
+                    if (rowOffset >= 0 && rowOffset <= this.rows - 1) {
                         let offsetCell = this.board[rowOffset][colOffset];
                         if (offsetCell.flagged) {
                             flagCount++;

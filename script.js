@@ -18,7 +18,15 @@ let game;
 function newGame() {
     if (game) {
         game.gameOver = true;
+        clearInterval(game.timer);
     }
+    runTimer.innerHTML = 0;
+    flagsLeft.innerHTML = 0;
+    runClicks.innerHTML = 0;
+    revealed.innerHTML = 0;
+    result.innerHTML = " - ";
+    resultWrapper.style.backgroundColor = "white";
+
     newGameButton.disabled = true;
     startButton.disabled = false;
     for (let div of difficultyRadios) {
@@ -30,20 +38,22 @@ function newGame() {
     for (let input of allInputs) {
         input.disabled = false;
     }
-    difficultyRadios.forEach(radio => {
-        radio.addEventListener("change", () => {
-            if (customRadio.checked) {
-                for (let div of customInput) {
-                    div.style.display = "flex";
-                }
-            } else {
-                for (let div of customInput) {
-                    div.style.display = "none";
-                }
-            }
-        })
-    });
+    toggleCustomInputs();
 }
+
+function toggleCustomInputs() {
+    for (let div of customInput) {
+        div.style.display = customRadio.checked ? "flex" : "none";
+    }
+}
+
+function initDifficultyControls() {
+    for (let radio of allRadios) {
+        radio.addEventListener("change", toggleCustomInputs);
+    }
+}
+
+initDifficultyControls();
 
 let difficulty = {
     easy: {
@@ -76,7 +86,7 @@ function startGame() {
      const selected = document.querySelector("input[name='difficulty']:checked").value;
      if (selected !== "custom") {
         let presets = difficulty[selected];
-        game = new Game(presets.width, presets.height, presets.mines);
+        game = new Game(presets.height, presets.width, presets.mines);
      } else {
         let width = widthInput.value;
         width = width <= 30 ? width : 30;
@@ -93,7 +103,7 @@ function startGame() {
         mines = mines < 1 ? 1 : mines;
         minesInput.value = mines;
 
-        game = new Game(width, height, mines);
+        game = new Game(height, width, mines);
      }
      game.displayBoard();
 }

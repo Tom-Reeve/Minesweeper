@@ -49,8 +49,7 @@ class Cell {
         if (!this.isMine && this.flagged){
             this.element.innerHTML = "&#10060;";
         } else if (!this.isMine) {
-            this.element.classList.add("class", "clicked");
-            this.element.style.backgroundColor = "lightgrey";
+            this.element.classList.add("clicked");
             this.element.innerHTML = "";
 
             this.element.style.color = cellColours[this.neighbourMineCount];
